@@ -240,6 +240,8 @@ function fit() {
 }
 
 // ---------- view switch ----------
+// remembered per device class: a choice made on a laptop must not leak into the phone view
+const VIEW_KEY = 'frame-reel-view-' + (window.innerWidth < 700 ? 'm' : 'd');
 function setView(v) {
   const desk = document.getElementById('dev-desk'), phone = document.getElementById('dev-phone');
   desk.hidden = v === 'phone';
@@ -249,7 +251,7 @@ function setView(v) {
     const f = d.querySelector('iframe');
     if (!d.hidden && !f.src) f.src = f.dataset.src;
   });
-  try { localStorage.setItem('frame-reel-view', v); } catch (e) {}
+  try { localStorage.setItem(VIEW_KEY, v); } catch (e) {}
   fit();
   requestAnimationFrame(fit);
 }
@@ -310,7 +312,7 @@ function render() {
 render();
 
 let start = window.innerWidth < 700 ? 'phone' : window.innerWidth < 1100 ? 'desk' : 'both';
-try { const s = localStorage.getItem('frame-reel-view'); if (s && ['phone', 'desk', 'both'].includes(s)) start = s; } catch (e) {}
+try { const s = localStorage.getItem(VIEW_KEY); if (s && ['phone', 'desk', 'both'].includes(s)) start = s; } catch (e) {}
 setView(start);
 </script>
 
